@@ -1,10 +1,17 @@
-import Counter from './components/Counter/Counter';
+// import CompletePage from "./pages/CompletePage/CompletePage";
+import { OrderContextProvider } from "./contexts/OrderContext";
+import OrderPage from "./pages/OrderPage/OrderPage";
+import SummaryPage from "./pages/SummaryPage/SummaryPage";
+import { useState } from "react";
 
 function App() {
+  const [step, setStep] = useState(0);
   return (
-    <div className="App">
-      {/* <Fetch url="/greeting" /> */}
-      <Counter />
+    <div style={{ padding: "4rem" }}>
+      <OrderContextProvider>
+        {step === 0 && <OrderPage setStep={setStep} />}
+        {step === 1 && <SummaryPage setStep={setStep} />}
+      </OrderContextProvider>
     </div>
   );
 }
