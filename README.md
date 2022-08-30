@@ -14,6 +14,7 @@
 
 [[TOAST UI] - React Testing Library를 이용한 선언적이고 확장 가능한 테스트](https://ui.toast.com/weekly-pick/ko_20210630#%EC%B2%A0%ED%95%99-%EC%A0%81%EC%9A%A9%ED%95%98%EA%B8%B0)
 
+---
 
 
 ## TDD with React
@@ -22,6 +23,11 @@
   - 소스 코드 안정감 부여
   - 디버깅 시간을 줄이고 실제 개발 시간도 단축할 수 있다.
   - 소스 코드 하나하나 신중하게 짜게되어 깨끗한 코드가 나올 확률이 높다.
+
+### TDD 단점
+  - 개발 시간의 증가(생산성 저하)
+
+---
 
 
 
@@ -33,6 +39,7 @@
     - getByAltText : img, area, input 등에 사용
     - getByTestId는 개발자만 알 수 있기 때문에 비선호되는 방식
   
+---
 
 ## userEvent > fireEvent
   - fireEvent보다 userEvent를 사용하는 것이 더 선호된다.
@@ -41,6 +48,7 @@
 
 
 
+---
 
 ## getBy vs queryBy vs findBy
 
@@ -55,3 +63,119 @@
   3. findBy
       - 주어진 쿼리와 일치하는 요소가 발견되면 Promise를 반환
       - 요소가 없거나 기본 제한 시간인 1000ms 후에 둘 이상의 요소가 발견되면 reject
+
+## role
+  - wai-aria는 컨텐츠에 정보를 추가하여 페이지의 접근성을 높이는 방법이다.
+  - role을 이용하면 특정 요소가 체크박스인지, 버튼인지 등을 파악할 수 있다.
+  - 단, 올바르지 못한 aria를 사용할 바엔 aria를 사용하지 않는 것이 좋다.
+
+#### 태그별 Role 파악하기
+  - [HTML role 정리](https://www.w3.org/TR/html-aria/#docconformance)
+  <table>
+    <th>HTML tag</th>
+    <th>default role</th>
+    <tr>
+      <td> a href="" </td>
+      <td> role="link" </td>
+    </tr>
+    <tr>
+      <td>header</td>
+      <td> role="banner" </td>
+    </tr>
+        <tr>
+      <td>footer</td>
+      <td> role="contentinfo" </td>
+    </tr>
+    <tr>
+      <td>nav</td>
+      <td> role="navigation" </td>
+    </tr>
+        <tr>
+      <td>button</td>
+      <td> role="button" </td>
+    </tr>
+        <tr>
+      <td>form</td>
+      <td> role="form" </td>
+    </tr>
+        <tr>
+      <td>img</td>
+      <td> role="img" </td>
+    </tr>
+        <tr>
+      <td>ul</td>
+      <td> role="list" </td>
+    </tr>
+        <tr>
+      <td>li</td>
+      <td> role="listitem" </td>
+    </tr>
+    <tr>
+      <td>svg</td>
+      <td> role="graphics-document" </td>
+    </tr>
+    <tr>
+      <td>input type="button"</td>
+      <td> role="button" </td>
+    </tr>
+    <tr>
+      <td>input type="checkbox"</td>
+      <td> role="checkbox" </td>
+    </tr>
+    <tr>
+      <td>input type="radio"</td>
+      <td> role="radio" </td>
+    </tr>
+    <tr>
+      <td>input type="text"</td>
+      <td> role="textbox" </td>
+    </tr>
+    <tr>
+      <td>input type="number"</td>
+      <td> role="spinbutton" </td>
+    </tr>
+        
+  </table>
+
+
+---
+
+## custom render로 provider 설정하기
+  - @testing-library/react 에서 제공하는 render 함수의 wrapper를 통해 provider를 적용할 수 있지만, 모든 케이스에 하나하나 적용하는 것은 불편하기 때문에 custom render를 만들어서 사용할 수 있다.
+
+  ```javascript
+  // 기본 render 함수 wrapper 적용 방법
+  test(('test message'), ()=> {
+    render(<OrderPage />, {wrapper : OrderContextProvider})
+    
+    //...test code
+  })
+  ```
+
+  ```javascript
+  // test-utils.js
+  import { OrderContextProvider } from "./contexts/OrderContext";
+  import { render } from "@testing-library/react";
+
+  const customRender = (ui, options) => {
+    return render(ui, { wrapper: OrderContextProvider, ...options });
+  };
+
+  export * from "@testing-library/react";
+  export { customRender as render };
+
+  
+  // calculate.test.js
+  import { render, screen } from "../../../test-utils";
+  import OrderPage from "../OrderPage";
+
+  test("update product's total when products change", async () => {
+    render(<OrderPage />);
+    
+    //... test
+  });
+  ```
+
+
+---
+
