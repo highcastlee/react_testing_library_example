@@ -5,9 +5,10 @@ function Products({ name, imagePath, updateItemCount }) {
     const currentValue = e.target.value;
     updateItemCount(name, currentValue);
   };
+
   return (
     <div style={{ textAlign: "center" }}>
-      <img style={{ width: "75%" }} src={`http://localhost:3000/${imagePath}`} alt={`${name} product`} />
+      <img style={{ width: "75%" }} src={imagePath} alt={`${name} product`} />
       <form style={{ marginTop: "10px" }}>
         <label htmlFor={name} style={{ textAlign: "right" }}>
           {name}

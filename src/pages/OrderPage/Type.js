@@ -17,7 +17,7 @@ function Type({ orderType }) {
 
   const loadItems = async (orderType) => {
     try {
-      const response = await axios.get(`http://localhost:3000/${orderType}`);
+      const response = await axios.get(`/${orderType}`);
       setItems(response.data);
     } catch (error) {
       setError(true);
@@ -40,6 +40,7 @@ function Type({ orderType }) {
   ));
 
   const orderTypeKorean = orderType === "products" ? "상품" : "옵션";
+
   return (
     <>
       <h2>주문 종류</h2>
