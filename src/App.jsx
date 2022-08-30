@@ -1,3 +1,4 @@
+import CompletePage from "./pages/CompletePage/CompletePage";
 // import CompletePage from "./pages/CompletePage/CompletePage";
 import { OrderContextProvider } from "./contexts/OrderContext";
 import OrderPage from "./pages/OrderPage/OrderPage";
@@ -11,6 +12,7 @@ function App() {
       <OrderContextProvider>
         {step === 0 && <OrderPage setStep={setStep} />}
         {step === 1 && <SummaryPage setStep={setStep} />}
+        {step === 2 && <CompletePage setStep={setStep} />}
       </OrderContextProvider>
     </div>
   );

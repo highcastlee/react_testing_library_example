@@ -28,7 +28,7 @@ export const handlers = [
     )
   ),
   rest.post("/order", (req, res, ctx) => {
-    const dummyData = [{ orderNumber: 2131234324, price: 2000 }];
+    const dummyData = [{ orderNumber: 2131234324, price: 2500 }];
     return res(ctx.json(dummyData));
   }),
 ];
