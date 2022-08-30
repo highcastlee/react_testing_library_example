@@ -179,3 +179,51 @@
 
 ---
 
+## not wrapped in act 경고
+  - 해당 경고는 리액트 컴포넌트에 아무 일이 일어나지 않을 것으로 예상한 상황에서 어떤 일이 일어나면 나오는 경고
+  - 컴포넌트에서 무언가가 일어나면 act라는 함수로 감싸주어야 한다.
+    ```javascript
+    act(()=>{
+      // fire events that update state
+    })
+    ```
+  - rect-testing-library는 내부적으로 act를 내포하고 있기 때문에 **리액트 콜 스택 안에 있을 때**는 act를 사용하지 않아도 내부적으로 act로 감싸져 있다.
+    ```javascript
+    if("update", ()=>{
+      act(()=>{
+        ReactDom.render(<Counter/>, container);
+      });
+
+      act(()=>{
+        button.dispatchEvent(new MouseEvent('click', {bubbles: true}));
+      });
+    });
+
+    // react-testing-library
+    it("update", ()=>{
+      const { getByText } = render(<Counter/>);
+      fireEvent.click(getByText("Save"));
+    });
+    ```
+  
+  - 하지만, 테스트가 **리액트 콜 스택 밖에** 있을 때는 act로 감싸주어야한다.
+    - 이 때는 waitFor API를 사용해서 테스트가 끝나기 전에 컴포넌트가 다 업데이트 되기를 기다려줘야 한다.
+    - findBy~는 getBy+WaitFor 이기 때문에 waitFor을 직접 쓰지 않고 하는 방법도 있다.
+  
+    ```javascript
+    // 방법 1
+    await waitFor(()=>{
+      screen.getByRole("spinbutton", {name : "America"});
+    })
+
+    // 방법 2
+    await screen.findByRole("spinbutton", {name: "America"})
+
+    ```
+  
+
+  - loading element 없애기 예제
+    - waitForElementToBeRemoved: 어떤 요소가 돔에서 사라지는 걸 기다림
+    ```javascript
+    await waitForElementToBeRemoved(()=> screen.getByText("정보를 저장 중입니다."))
+    ```
